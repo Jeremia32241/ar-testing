@@ -24,22 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Show artwork in AR view
     function showArtwork(artwork) {
-        currentArtwork = artwork;
-        
-        // Update marker and model
-        currentMarker.setAttribute('url', artwork.markerPattern);
-        currentModel.setAttribute('gltf-model', artwork.modelPath);
-        currentModel.setAttribute('scale', artwork.scale);
-        
-        // Update info panel
-        artworkTitle.textContent = `${artwork.title} (${artwork.year})`;
-        artworkDescription.textContent = artwork.description;
-        
-        // Switch to view mode
-        scanModePanel.classList.add('hidden');
-        viewModePanel.classList.remove('hidden');
-        isViewing = true;
+    console.log('🖼 Displaying artwork:', artwork.title);
+    currentArtwork = artwork;
+    isViewing = true;
+
+    // Auto tampilkan info
+    scanModePanel.style.display = 'none';
+    viewModePanel.style.display = 'block';
+    artworkTitle.textContent = artwork.title;
+    artworkDescription.textContent = artwork.description;
+
+    if (artwork.modelUrl) {
+        load3DModel(artwork.modelUrl);
     }
+
+    updateStatus(`Melihat: ${artwork.title}`);
+}
     
     // Return to scan mode
     function returnToScanMode() {
