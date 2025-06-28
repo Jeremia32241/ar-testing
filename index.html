@@ -1,44 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>AR Museum Experience</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script src="database.js" defer></script>
     <script src="app.js" defer></script>
 </head>
 <body>
+    <!-- Info Panel -->
     <div id="info-panel">
         <div id="scan-mode">
-            <button id="start-ar">
-                <span class="button-text">Mulai AR Experience</span>
-            </button>
             <div id="instructions">
-                <p>✨ Arahkan kamera ke marker gambar untuk melihat model 3D yang menakjubkan</p>
+                <p>📷 Arahkan kamera ke gambar karya seni untuk melihat model 3D dan penjelasannya</p>
             </div>
         </div>
         
         <div id="view-mode" class="hidden">
             <div id="artwork-info">
-                <h2 id="artwork-title">Karya Seni</h2>
-                <p id="artwork-description">Deskripsi karya seni akan muncul di sini...</p>
+                <h2 id="artwork-title">Judul Karya</h2>
+                <p id="artwork-description">Deskripsi karya akan muncul di sini.</p>
                 <button id="exit-view">Keluar</button>
             </div>
         </div>
     </div>
 
+    <!-- Status Indicator -->
     <div class="status-indicator">
         <div class="status-dot"></div>
-        <span>AR Ready</span>
+        <span id="status-text">Memulai AR...</span>
     </div>
 
-    <a-scene id="ar-scene" embedded arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" vr-mode-ui="enabled: false">
-        <a-marker id="current-marker" type="pattern" url="">
-            <a-entity id="current-model" gltf-model="" scale="0.1 0.1 0.1"></a-entity>
+    <!-- AR Scene -->
+    <a-scene 
+        id="ar-scene" 
+        embedded 
+        arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" 
+        vr-mode-ui="enabled: false"
+    >
+        <!-- Marker yang menggunakan file .patt -->
+        <a-marker 
+            id="current-marker" 
+            type="pattern" 
+            url="markers/castil-luar-marker.patt"
+        >
+            <a-entity id="current-model" position="0 0 0" scale="0.5 0.5 0.5"></a-entity>
         </a-marker>
+
         <a-entity camera></a-entity>
     </a-scene>
 </body>
