@@ -82,6 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     });
 
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+        console.log("📷 Kamera aktif");
+        stream.getTracks().forEach(track => track.stop()); // jangan lupa stop agar tidak bentrok
+    })
+    .catch((error) => {
+        console.error("❌ Tidak dapat mengakses kamera:", error.name, error.message);
+        alert("⚠️ Tidak bisa mengakses kamera. Pastikan sudah izinkan di browser dan akses dari HTTPS.");
+    });
+
+
     // Initial status
     updateStatus('Menunggu marker...');
 });
