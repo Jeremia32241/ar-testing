@@ -40,23 +40,36 @@
         /* Modern glassmorphism panel */
         #info-panel {
             position: fixed;
-            top: 10px;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            max-width: 90vw; /* <--- tambahkan ini */
-            width: auto;
-            min-width: 260px;
-            padding: 10px 16px;
-             border: 1px solid limegreen;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 12px 20px;
+            max-width: 90vw;
+            width: fit-content;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            text-align: center;
         }
+
         
         #info-panel,
         .status-indicator {
-            z-index: 1000;
             position: fixed;
-            border: 1px solid red;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
         }
+
 
 
         /* Scan mode styles */
@@ -316,4 +329,20 @@
         /* Hidden class */
         .hidden {
             display: none !important;
+        }
+
+        @media screen and (orientation: portrait) {
+        a-scene {
+            transform: rotate(0deg) !important;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+        }
+
+        @media screen and (orientation: landscape) {
+        a-scene {
+            transform: rotate(0deg) !important;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
         }
