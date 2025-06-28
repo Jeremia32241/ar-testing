@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
-    const startARButton = document.getElementById('start-ar');
     const exitViewButton = document.getElementById('exit-view');
     const scanModePanel = document.getElementById('scan-mode');
     const viewModePanel = document.getElementById('view-mode');
@@ -9,81 +8,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const arScene = document.getElementById('ar-scene');
     const currentMarker = document.getElementById('current-marker');
     const currentModel = document.getElementById('current-model');
-    
+    const statusText = document.getElementById('status-text');
+
     // State management
     let currentArtwork = null;
     let isViewing = false;
-    
-    // Initialize AR scene with all possible markers
-    function initializeARScene() {
-        const patterns = getAllMarkerPatterns();
-        patterns.forEach(pattern => {
-            // AR.js will handle multiple markers internally
-        });
+
+    // Update status text
+    function updateStatus(text) {
+        if (statusText) statusText.textContent = text;
+        console.log('ℹ️ Status:', text);
     }
-    
+
     // Show artwork in AR view
     function showArtwork(artwork) {
-    console.log('🖼 Displaying artwork:', artwork.title);
-    currentArtwork = artwork;
-    isViewing = true;
+        console.log('🖼️ Displaying artwork:', artwork.title);
+        currentArtwork = artwork;
+        isViewing = true;
 
-    // Auto tampilkan info
-    scanModePanel.style.display = 'none';
-    viewModePanel.style.display = 'block';
-    artworkTitle.textContent = artwork.title;
-    artworkDescription.textContent = artwork.description;
+        scanModePanel.classList.add('hidden');
+        viewModePanel.classList.remove('hidden');
+        artworkTitle.textContent = artwork.title;
+        artworkDescription.textContent = artwork.description;
 
-    if (artwork.modelUrl) {
-        load3DModel(artwork.modelUrl);
+        if (artwork.modelPath) {
+            load3DModel(artwork.modelPath, artwork.scale);
+        }
+
+        updateStatus(`Melihat: ${artwork.title}`);
     }
 
-    updateStatus(`Melihat: ${artwork.title}`);
-}
-    
+    // Load 3D model
+    function load3DModel(url, scale = "0.5 0.5 0.5") {
+        currentModel.setAttribute('gltf-model', `url(${url})`);
+        currentModel.setAttribute('scale', scale);
+    }
+
     // Return to scan mode
     function returnToScanMode() {
-        // Reset AR scene
-        currentMarker.setAttribute('url', '');
         currentModel.setAttribute('gltf-model', '');
-        
-        // Switch to scan mode
         scanModePanel.classList.remove('hidden');
         viewModePanel.classList.add('hidden');
         isViewing = false;
         currentArtwork = null;
+        updateStatus('AR Siap - Arahkan ke marker');
     }
-    
+
     // Event listener for marker found
-    arScene.addEventListener('markerFound', (e) => {
-        if (isViewing) return; // Already viewing an artwork
-        
-        const marker = e.target;
-        const patternUrl = marker.getAttribute('url');
+    currentMarker.addEventListener('markerFound', () => {
+        if (isViewing) return;
+
+        const patternUrl = currentMarker.getAttribute('url');
+        console.log('🔍 Marker ditemukan:', patternUrl);
         const artwork = findArtworkByMarkerPattern(patternUrl);
-        
+
         if (artwork) {
             showArtwork(artwork);
+        } else {
+            updateStatus('Marker tidak dikenal');
         }
     });
-    
-    // Event listener for exit view button
+
+    // Exit view
     exitViewButton.addEventListener('click', returnToScanMode);
-    
-    // Event listener for start AR button
-    startARButton.addEventListener('click', () => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(() => {
-                    startARButton.textContent = 'Scanning...';
-                    initializeARScene();
-                })
-                .catch((error) => {
-                    alert('Tidak dapat mengakses kamera: ' + error.message);
-                });
-        }
-    });
-    
-    // Initialize
-    initializeARScene();
+
+    // Auto init
+    updateStatus('Menunggu marker...');
 });
