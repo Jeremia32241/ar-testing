@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const arScene = document.getElementById('ar-scene');
     const currentMarker = document.getElementById('current-marker');
     const currentModel = document.getElementById('current-model');
+    
+    // Optional status text element
     const statusText = document.getElementById('status-text');
 
     // State management
@@ -54,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStatus('AR Siap - Arahkan ke marker');
     }
 
-    // Event listener for marker found
+    // Marker detection event
     currentMarker.addEventListener('markerFound', () => {
         if (isViewing) return;
 
@@ -72,6 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Exit view
     exitViewButton.addEventListener('click', returnToScanMode);
 
-    // Auto init
+    // Auto orientation handler (optional)
+    window.addEventListener("orientationchange", () => {
+        console.log("📱 Orientation changed to", window.orientation);
+        setTimeout(() => {
+            document.body.style.height = window.innerHeight + "px";
+        }, 300);
+    });
+
+    // Initial status
     updateStatus('Menunggu marker...');
 });
